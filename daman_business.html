@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daman — Company Health Policy (Business Space)</title>
+<style>
+  :root{
+    --tamm-teal:#0f766e;
+    --ink:#1f2937;
+    --slate:#64748b;
+    --line:#e5e7eb;
+    --panel:#f8fafc;
+    --panel-line:#eef2f5;
+    --mint:#ecfdf5;
+    --mint-line:#a7f3d0;
+    --gold:#b08d4f;
+    --active-bg:#d1fae5;
+    --active-ink:#065f46;
+    --amber-bg:#fef3c7;
+    --amber-ink:#92400e;
+    --ded-bg:#eff6ff;
+    --ded-line:#bfdbfe;
+    --ded-ink:#1d4ed8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;line-height:1.5;
+  }
+  .frame{max-width:1120px;margin:0 auto;padding:0 28px 64px}
+
+  .nav{display:flex;align-items:center;gap:28px;padding:16px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--slate)}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--tamm-teal);font-size:17px;letter-spacing:-.3px}
+  .logo .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--tamm-teal),#2dd4bf);display:inline-block;position:relative}
+  .logo .mark::after{content:"";position:absolute;inset:6px;border:2px solid #fff;border-radius:3px;opacity:.85}
+  .nav a{color:var(--slate);text-decoration:none}
+  .nav .spacer{margin-left:auto;display:flex;align-items:center;gap:18px}
+  .pill-lang{border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:13px}
+  .avatar{width:30px;height:30px;border-radius:50%;background:#e2e8f0}
+
+  .crumb{font-size:13px;color:var(--slate);margin:22px 0 10px}
+  .crumb b{color:var(--tamm-teal);font-weight:600}
+  h1{font-size:32px;letter-spacing:-.6px;font-weight:700}
+  .subar{font-size:15px;color:var(--slate);margin-top:4px;direction:rtl;text-align:left}
+
+  .banner{margin:20px 0 6px;background:var(--mint);border:1px solid var(--mint-line);border-radius:10px;padding:14px 18px}
+  .banner .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--active-ink);text-transform:uppercase;margin-bottom:4px}
+  .banner p{font-size:13.5px;color:#0f5132}
+
+  .grid{display:grid;grid-template-columns:1fr 320px;gap:24px;margin-top:22px}
+  .card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:22px}
+
+  /* DED licence extract block */
+  .ded{background:var(--ded-bg);border:1px solid var(--ded-line);border-radius:12px;padding:16px 18px}
+  .ded .dedhead{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .ded .dedhead .lic{width:34px;height:34px;border-radius:8px;background:#dbeafe;display:flex;align-items:center;justify-content:center;color:var(--ded-ink)}
+  .ded .dedhead svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .ded .dedhead .t{font-size:13px;font-weight:700;color:var(--ded-ink)}
+  .ded .dedhead .s{font-size:11px;color:#60a5fa;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+  .ded .dedgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px}
+  .ded .di{font-size:13px}
+  .ded .di .dk{color:#60a5fa;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+  .ded .di .dv{color:var(--ink);font-weight:600;margin-top:1px}
+  .ded .verified{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:11.5px;font-weight:600;color:var(--ded-ink)}
+  .ded .verified svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+  .actions{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:20px}
+  .act{border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px;border-radius:10px;transition:background .15s;font-family:inherit}
+  .act:hover{background:var(--panel)}
+  .act .ic{width:42px;height:42px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;color:var(--tamm-teal)}
+  .act .ic svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .act .lbl{font-size:12px;color:var(--ink);font-weight:600;text-align:center;line-height:1.3}
+  .act .code{font-size:10px;color:var(--slate);text-align:center}
+
+  .summary h3{font-size:16px;font-weight:700;margin-bottom:16px}
+  .srow{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--panel-line);font-size:13.5px}
+  .srow:last-child{border-bottom:none}
+  .srow .k{color:var(--slate)}
+  .srow .v{font-weight:600;text-align:right}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;background:var(--active-bg);color:var(--active-ink)}
+
+  .section-h{margin:36px 0 4px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
+  .section-sub{font-size:13px;color:var(--slate);margin-bottom:16px}
+
+  /* employee table */
+  .emp-tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .emp-tools input{flex:1;min-width:180px;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit}
+  .btn-primary{background:var(--tamm-teal);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+  .btn-primary svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2}
+  table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  thead th{background:var(--panel);text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--slate);font-weight:700;padding:11px 16px}
+  tbody td{padding:12px 16px;font-size:13.5px;border-top:1px solid var(--panel-line)}
+  tbody tr:hover{background:#fbfdff}
+  .emp-name{font-weight:600}
+  .emp-sub{font-size:12px;color:var(--slate)}
+  .st-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+  .st-tag.act{background:var(--active-bg);color:var(--active-ink)}
+  .st-tag.pen{background:var(--amber-bg);color:var(--amber-ink)}
+  .rowbtn{background:none;border:1px solid var(--line);border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;font-family:inherit}
+  .rowbtn:hover{border-color:var(--tamm-teal);color:var(--tamm-teal)}
+
+  .foot-note{margin-top:30px;font-size:12px;color:#94a3b8;display:flex;gap:8px;align-items:flex-start}
+  .foot-note .i{width:16px;height:16px;border-radius:50%;border:1px solid #cbd5e1;color:#94a3b8;font-size:11px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+
+  .cookiebar{position:fixed;left:0;right:0;bottom:0;background:#1f2937;color:#e5e7eb;display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 20px;font-size:13px}
+  .cookiebar a{color:#93c5fd}
+  .cookiebar .accept{background:var(--tamm-teal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-weight:600;cursor:pointer;font-family:inherit}
+
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr}
+    .ded .dedgrid{grid-template-columns:1fr}
+    .actions{grid-template-columns:repeat(3,1fr)}
+    thead{display:none}
+    table,tbody,tr,td{display:block;width:100%}
+    tbody tr{border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+    tbody td{border:none}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="nav">
+    <div class="logo"><span class="mark"></span> TAMM</div>
+    <a href="#">My TAMM</a>
+    <a href="#">Business Space</a>
+    <a href="#">Services</a>
+    <a href="#">Support</a>
+    <div class="spacer">
+      <span class="pill-lang">AA · English</span>
+      <div class="avatar"></div>
+    </div>
+  </div>
+
+  <div class="crumb">Home · <b>Business Space</b> · Company Health Insurance</div>
+  <h1>Enhanced Health Insurance — Company</h1>
+  <div class="subar">التأمين الصحي المحسّن — الشركات</div>
+
+  <div class="banner">
+    <span class="tag">Shown in Business Space</span>
+    <p>Your DED economic licence is extracted automatically — no re-upload. Renew, enrol, add members or cancel the company policy from this record. Employee lists carry across all Daman actions.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+
+      <div class="ded">
+        <div class="dedhead">
+          <span class="lic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h4M7 13h7M15 9h2"/></svg></span>
+          <div>
+            <div class="t">DED Economic Licence — extracted</div>
+            <div class="s">Pulled from Business Space</div>
+          </div>
+        </div>
+        <div class="dedgrid">
+          <div class="di"><div class="dk">Trade Name</div><div class="dv">Noor Trading LLC</div></div>
+          <div class="di"><div class="dk">Licence No.</div><div class="dv">CN-1938472</div></div>
+          <div class="di"><div class="dk">Legal Form</div><div class="dv">Limited Liability Co.</div></div>
+          <div class="di"><div class="dk">Licence Expiry</div><div class="dv">14 Mar 2027</div></div>
+        </div>
+        <span class="verified"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Verified against DED records</span>
+      </div>
+
+      <div class="actions">
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></span>
+          <span class="lbl">Renew Policy</span>
+          <span class="code">DAMAN/00017 · 00012</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></span>
+          <span class="lbl">Enrol Policy</span>
+          <span class="code">DAMAN/00030</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M19 8v6M16 11h6"/></svg></span>
+          <span class="lbl">Add Members</span>
+          <span class="code">DAMAN/00014 · 00037</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg></span>
+          <span class="lbl">Cancel Policy</span>
+          <span class="code">DAMAN/00015 · 00032</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h6"/></svg></span>
+          <span class="lbl">Certificate of Continuity</span>
+          <span class="code">DAMAN/00024</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card summary">
+      <h3>Policy Summary</h3>
+      <div class="srow"><span class="k">Company</span><span class="v">Noor Trading LLC</span></div>
+      <div class="srow"><span class="k">Policy Number</span><span class="v">ENH-2024-11026</span></div>
+      <div class="srow"><span class="k">Plan Type</span><span class="v">Enhanced — &gt;10 Employees</span></div>
+      <div class="srow"><span class="k">Employees Covered</span><span class="v">34</span></div>
+      <div class="srow"><span class="k">Policy Expiry</span><span class="v">31 Dec 2026</span></div>
+      <div class="srow"><span class="k">Status</span><span class="v"><span class="badge">Active</span></span></div>
+    </div>
+  </div>
+
+  <div class="section-h">Covered Employees · Member Management</div>
+  <div class="section-sub">Add, renew or remove members against the extracted licence. Employee identity is pulled once and reused across every Daman action.</div>
+
+  <div class="emp-tools">
+    <input placeholder="Search employees by name or Emirates ID…">
+    <button class="btn-primary"><svg viewBox="0 0 24 24" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Add Member</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Employee</th><th>Emirates ID</th><th>Role</th><th>Status</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="emp-name">Ahmed Saeed</div><div class="emp-sub">Enrolled 12 Jan 2024</div></td>
+        <td>784-1988-xxxxxx-1</td>
+        <td>Employee</td>
+        <td><span class="st-tag act">Active</span></td>
+        <td><button class="rowbtn">Manage</button></td>
+      </tr>
+      <tr>
+        <td><div class="emp-name">Priya Nair</div><div class="emp-sub">Enrolled 12 Jan 2024</div></td>
+        <td>784-1991-xxxxxx-4</td>
+        <td>Employee</td>
+        <td><span class="st-tag act">Active</span></td>
+        <td><button class="rowbtn">Manage</button></td>
+      </tr>
+      <tr>
+        <td><div class="emp-name">John Mathew</div><div class="emp-sub">Submitted 28 Jul 2026</div></td>
+        <td>784-1985-xxxxxx-9</td>
+        <td>New Employee</td>
+        <td><span class="st-tag pen">Pending addition</span></td>
+        <td><button class="rowbtn">Manage</button></td>
+      </tr>
+      <tr>
+        <td><div class="emp-name">Layla Hassan</div><div class="emp-sub">Enrolled 03 Mar 2024</div></td>
+        <td>784-1993-xxxxxx-2</td>
+        <td>Employee</td>
+        <td><span class="st-tag act">Active</span></td>
+        <td><button class="rowbtn">Manage</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="foot-note">
+    <span class="i">i</span>
+    <span>Prototype for the Daman Service Redesign Workshop. This Business-space entry point reflects the agreed To-Be direction; the DED licence extract, action set and final layout remain subject to DoH, Daman and TAMM confirmation.</span>
+  </div>
+
+</div>
+
+<div class="cookiebar">
+  TAMM uses cookies to make the site simpler. <a href="#">Find out more about cookies.</a>
+  <button class="accept">Accept</button>
+</div>
+</body>
+</html>

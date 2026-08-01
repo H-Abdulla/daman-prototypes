@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daman — Health Plan (Sahatna Space)</title>
+<style>
+  :root{
+    --tamm-teal:#0f766e;
+    --tamm-teal-deep:#115e59;
+    --ink:#1f2937;
+    --slate:#64748b;
+    --line:#e5e7eb;
+    --bg:#ffffff;
+    --panel:#f8fafc;
+    --panel-line:#eef2f5;
+    --mint:#ecfdf5;
+    --mint-line:#a7f3d0;
+    --gold:#b08d4f;
+    --active-bg:#d1fae5;
+    --active-ink:#065f46;
+    --amber-bg:#fef3c7;
+    --amber-ink:#92400e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  .frame{max-width:1120px;margin:0 auto;padding:0 28px 64px}
+
+  /* Top nav */
+  .nav{
+    display:flex;align-items:center;gap:28px;
+    padding:16px 0;border-bottom:1px solid var(--line);
+    font-size:14px;color:var(--slate);
+  }
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--tamm-teal);font-size:17px;letter-spacing:-.3px}
+  .logo .mark{
+    width:26px;height:26px;border-radius:7px;
+    background:linear-gradient(135deg,var(--tamm-teal),#2dd4bf);
+    display:inline-block;position:relative;
+  }
+  .logo .mark::after{content:"";position:absolute;inset:6px;border:2px solid #fff;border-radius:3px;opacity:.85}
+  .nav a{color:var(--slate);text-decoration:none}
+  .nav .spacer{margin-left:auto;display:flex;align-items:center;gap:18px}
+  .pill-lang{border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:13px}
+  .avatar{width:30px;height:30px;border-radius:50%;background:#e2e8f0}
+
+  /* Breadcrumb + title */
+  .crumb{font-size:13px;color:var(--slate);margin:22px 0 10px}
+  .crumb b{color:var(--tamm-teal);font-weight:600}
+  h1{font-size:32px;letter-spacing:-.6px;font-weight:700;color:var(--ink)}
+  .subar{font-size:15px;color:var(--slate);margin-top:4px;direction:rtl;text-align:left}
+
+  /* Info banner */
+  .banner{
+    margin:20px 0 6px;background:var(--mint);border:1px solid var(--mint-line);
+    border-radius:10px;padding:14px 18px;
+  }
+  .banner .tag{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;
+    color:var(--active-ink);text-transform:uppercase;margin-bottom:4px;
+  }
+  .banner p{font-size:13.5px;color:#0f5132}
+
+  /* Main grid */
+  .grid{display:grid;grid-template-columns:1fr 320px;gap:24px;margin-top:22px}
+
+  /* Preview + actions card */
+  .card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:22px}
+  .preview{
+    height:210px;border:1.5px dashed #cbd5e1;border-radius:10px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:#94a3b8;font-size:14px;gap:10px;background:var(--panel);
+  }
+  .preview .doc{
+    width:44px;height:52px;border:2px solid #cbd5e1;border-radius:5px;position:relative;background:#fff;
+  }
+  .preview .doc::before{content:"";position:absolute;top:8px;left:8px;right:8px;height:2px;background:#cbd5e1;box-shadow:0 8px 0 #cbd5e1,0 16px 0 #cbd5e1,0 24px 0 #e2e8f0}
+  .preview .doc::after{content:"";position:absolute;top:0;right:0;border-width:0 12px 12px 0;border-style:solid;border-color:#f8fafc #f8fafc #cbd5e1 #cbd5e1}
+
+  /* Action row */
+  .actions{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:22px}
+  .act{
+    border:none;background:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    padding:14px 6px;border-radius:10px;transition:background .15s;
+    font-family:inherit;
+  }
+  .act:hover{background:var(--panel)}
+  .act .ic{
+    width:42px;height:42px;border-radius:50%;background:var(--mint);
+    display:flex;align-items:center;justify-content:center;color:var(--tamm-teal);
+  }
+  .act .ic svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .act .lbl{font-size:12px;color:var(--ink);font-weight:600;text-align:center;line-height:1.3}
+  .act .code{font-size:10px;color:var(--slate)}
+
+  /* Summary sidebar */
+  .summary h3{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)}
+  .srow{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--panel-line);font-size:13.5px}
+  .srow:last-child{border-bottom:none}
+  .srow .k{color:var(--slate)}
+  .srow .v{color:var(--ink);font-weight:600;text-align:right}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;background:var(--active-bg);color:var(--active-ink)}
+  .badge.amber{background:var(--amber-bg);color:var(--amber-ink)}
+
+  /* Family tree section */
+  .section-h{margin:36px 0 4px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
+  .section-sub{font-size:13px;color:var(--slate);margin-bottom:16px}
+  .members{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .member{
+    border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .member .pic{width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+  .member .info{min-width:0}
+  .member .nm{font-size:14px;font-weight:600;color:var(--ink)}
+  .member .rel{font-size:12px;color:var(--slate);margin-top:1px}
+  .member .st{font-size:11px;font-weight:600;margin-top:6px}
+  .st.ok{color:var(--active-ink)}
+  .st.pend{color:var(--amber-ink)}
+  .chip-dw{display:inline-block;margin-top:6px;font-size:10px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:20px;background:#eef2ff;color:#4338ca}
+
+  /* footer cookie bar */
+  .cookiebar{
+    position:fixed;left:0;right:0;bottom:0;background:#1f2937;color:#e5e7eb;
+    display:flex;align-items:center;justify-content:center;gap:16px;
+    padding:12px 20px;font-size:13px;
+  }
+  .cookiebar a{color:#93c5fd}
+  .cookiebar .accept{background:var(--tamm-teal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-weight:600;cursor:pointer;font-family:inherit}
+
+  .foot-note{margin-top:30px;font-size:12px;color:#94a3b8;display:flex;gap:8px;align-items:flex-start}
+  .foot-note .i{width:16px;height:16px;border-radius:50%;border:1px solid #cbd5e1;color:#94a3b8;font-size:11px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr}
+    .members{grid-template-columns:1fr}
+    .actions{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="nav">
+    <div class="logo"><span class="mark"></span> TAMM</div>
+    <a href="#">My TAMM</a>
+    <a href="#">Services</a>
+    <a href="#">Sahatna</a>
+    <a href="#">Support</a>
+    <div class="spacer">
+      <span class="pill-lang">AA · English</span>
+      <div class="avatar"></div>
+    </div>
+  </div>
+
+  <div class="crumb">Home · <b>Sahatna</b> · Health Insurance</div>
+  <h1>Abu Dhabi Basic Health Insurance</h1>
+  <div class="subar">التأمين الصحي الأساسي — أبوظبي</div>
+
+  <div class="banner">
+    <span class="tag">Shown in Sahatna Space</span>
+    <p>Renew, add or remove members and manage your Daman plan directly from this record — the customer does not search for a separate service. Family members are linked from your Family Tree, including domestic workers.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="preview">
+        <span class="doc"></span>
+        Policy preview
+      </div>
+
+      <div class="actions">
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></span>
+          <span class="lbl">Renew Policy</span>
+          <span class="code">DAMAN/0001</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M19 8v6M16 11h6"/></svg></span>
+          <span class="lbl">Add Member</span>
+          <span class="code">DAMAN/00014</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 11h6"/></svg></span>
+          <span class="lbl">Remove Member</span>
+          <span class="code">DAMAN/00015</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg></span>
+          <span class="lbl">Cancel Policy</span>
+          <span class="code">DAMAN/00032</span>
+        </button>
+        <button class="act">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h6"/></svg></span>
+          <span class="lbl">Certificate of Continuity</span>
+          <span class="code">DAMAN/00024</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card summary">
+      <h3>Policy Summary</h3>
+      <div class="srow"><span class="k">Policyholder</span><span class="v">Fatima A. Al Mansoori</span></div>
+      <div class="srow"><span class="k">Policy Number</span><span class="v">ADB-2024-04871</span></div>
+      <div class="srow"><span class="k">Plan Type</span><span class="v">AD Basic — Individual</span></div>
+      <div class="srow"><span class="k">Members Covered</span><span class="v">5</span></div>
+      <div class="srow"><span class="k">Policy Expiry</span><span class="v">30 Sep 2026</span></div>
+      <div class="srow"><span class="k">Status</span><span class="v"><span class="badge">Active</span></span></div>
+    </div>
+  </div>
+
+  <div class="section-h">Linked Family Tree · Covered Members</div>
+  <div class="section-sub">Pulled from your Family Space on TAMM. Add or remove members without re-entering their details.</div>
+  <div class="members">
+    <div class="member">
+      <div class="pic" style="background:#0f766e">FA</div>
+      <div class="info">
+        <div class="nm">Fatima Al Mansoori</div>
+        <div class="rel">Policyholder</div>
+        <div class="st ok">● Covered</div>
+      </div>
+    </div>
+    <div class="member">
+      <div class="pic" style="background:#2563eb">KA</div>
+      <div class="info">
+        <div class="nm">Khalid Al Mansoori</div>
+        <div class="rel">Spouse</div>
+        <div class="st ok">● Covered</div>
+      </div>
+    </div>
+    <div class="member">
+      <div class="pic" style="background:#7c3aed">SA</div>
+      <div class="info">
+        <div class="nm">Sara Al Mansoori</div>
+        <div class="rel">Daughter</div>
+        <div class="st ok">● Covered</div>
+      </div>
+    </div>
+    <div class="member">
+      <div class="pic" style="background:#db2777">OA</div>
+      <div class="info">
+        <div class="nm">Omar Al Mansoori</div>
+        <div class="rel">Son · Newborn</div>
+        <div class="st pend">● Pending addition</div>
+      </div>
+    </div>
+    <div class="member">
+      <div class="pic" style="background:#ea580c">MR</div>
+      <div class="info">
+        <div class="nm">Maria Reyes</div>
+        <div class="rel">Domestic Worker</div>
+        <div class="st ok">● Covered</div>
+        <span class="chip-dw">DOMESTIC WORKER</span>
+      </div>
+    </div>
+    <div class="member" style="border-style:dashed;align-items:center;justify-content:center;color:var(--tamm-teal);cursor:pointer">
+      <div style="text-align:center">
+        <div style="font-size:22px;line-height:1">+</div>
+        <div style="font-size:13px;font-weight:600;margin-top:4px">Add from Family Tree</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-note">
+    <span class="i">i</span>
+    <span>Prototype for the Daman Service Redesign Workshop. This Sahatna-space entry point reflects the agreed To-Be direction; final layout and the full set of available actions remain subject to DoH, Daman and TAMM confirmation.</span>
+  </div>
+
+</div>
+
+<div class="cookiebar">
+  TAMM uses cookies to make the site simpler. <a href="#">Find out more about cookies.</a>
+  <button class="accept">Accept</button>
+</div>
+</body>
+</html>
